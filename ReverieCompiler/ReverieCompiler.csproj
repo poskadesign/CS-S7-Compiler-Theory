@@ -45,7 +45,11 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Scanner.cs" />
     <Compile Include="Traits\RegularLanguage.cs" />
+    <Compile Include="Traits\LanguageToken.cs" />
+    <Compile Include="Traits\TokenExpression.cs" />
+    <Compile Include="Utilities\RegexExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
