@@ -10,7 +10,10 @@ using System.Text.RegularExpressions;
 
 namespace Reverie.Utilities {
     public class RegexExtensions : Regex {
-        public static bool IsPartialMatch(string input, string expression)
-            => IsMatch(input, @"\A(?:" + expression + @")");
+        public static bool IsPartialMatch(string input, string pattern)
+            => IsMatch(input, @"\A(?:" + pattern + @")");
+
+        public static Match PartialMatch(string input, string pattern)
+            => Match(input, @"\A(?:" + pattern + @")");
     }
 }
