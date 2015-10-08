@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
+using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
+using Reverie.Processing;
 using Reverie.Traits;
 using Reverie.Utilities;
 
@@ -21,15 +24,20 @@ namespace Reverie.Tests {
 
         private static void TestFuncKeywordExpression() {
             var i = "func\nsum(a, b)\n\tret 0";
-            var match = RegexExtensions.PartialMatch(i, RegularLanguage.TokenPatterns[LanguageToken.KW_FUNC]);
-            Console.WriteLine(match?.Captures[0]);
-            Debugger.Break();
+            var match = RegexExtensions.PartialMatch(i, RegularLanguage.TokenPatterns[Token.KW_FUNC]);
+            Console.WriteLine(match?.Captures[0]);Debugger.Break();
             (match.Captures.Count != 1).Test();
         }
 
         private static void TestScanner() {
+            string testString;
+            using (var sr = new StreamReader(@"..\..\SampleFiles\sample1.re")) {
+                testString = sr.ReadToEnd();
+            }
             var s = new Scanner();
-            var res = s.IdentifyTokens("func sum(a, b)\n\treturn a+b\n\nsum(2, 4)");
+            Console.WriteLine($"Scanning: \n\n{testString}\n---END\n\nIdentified tokens:\n");
+            var res = s.IdentifyTokens("func sum(a, b)\n\tret a+b\n\nsum(2, 4)");
+            res.ForEach((r) => Console.WriteLine(r));
             Debugger.Break();
         }
     }

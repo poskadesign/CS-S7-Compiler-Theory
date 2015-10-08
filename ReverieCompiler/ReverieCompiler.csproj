@@ -43,9 +43,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Exceptions\ErrorCode.cs" />
+    <Compile Include="Exceptions\ScannerException.cs" />
+    <Compile Include="Processing\ResolvedToken.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Scanner.cs" />
+    <Compile Include="Processing\Scanner.cs" />
     <Compile Include="Traits\RegularLanguage.cs" />
     <Compile Include="Utilities\RegexExtensions.cs" />
   </ItemGroup>

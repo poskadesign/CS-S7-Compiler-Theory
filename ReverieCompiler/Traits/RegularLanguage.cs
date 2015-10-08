@@ -6,16 +6,14 @@
 //   2015-10-05
 //
 
-using System;
 using System.Collections.Generic;
-using System.Runtime.Remoting.Messaging;
 using Pattern = System.String;
 
 namespace Reverie.Traits {
     /// <summary>
     /// Defines all regular language tokens
     /// </summary>
-    public enum LanguageToken
+    public enum Token
     {
         // whitespace
         INDENT,
@@ -37,6 +35,8 @@ namespace Reverie.Traits {
 
         IDENTIFIER,
 
+        INTEGER,
+
         SEPARATOR
     }
 
@@ -48,27 +48,29 @@ namespace Reverie.Traits {
         /// <summary>
         /// Maps language tokens to their respective regular expression patterns
         /// </summary>
-        public static IDictionary<LanguageToken, Pattern> TokenPatterns = new Dictionary<LanguageToken, Pattern> {
-            [LanguageToken.INDENT] = @"(\t)|(\s{4})",
-            [LanguageToken.NEW_LINE] = @"(\n)|(\r)",
+        public static IDictionary<Token, Pattern> TokenPatterns = new Dictionary<Token, Pattern> {
+            [Token.INDENT] = @"(\t)|(\s{4})",
+            [Token.NEW_LINE] = @"(\n)|(\r)",
 
-            [LanguageToken.OP_ADDITION] = @"(\+)",
-            [LanguageToken.OP_DIVISION] = @"(/)",
-            [LanguageToken.OP_EXPONENT] = @"(\^)",
-            [LanguageToken.OP_SUBTRACTION] = @"(-)",
-            [LanguageToken.OP_MODULO] = @"(%)",
-            [LanguageToken.OP_MULTIPLICATION] = @"(\*)",
+            [Token.OP_ADDITION] = @"(\+)",
+            [Token.OP_DIVISION] = @"(/)",
+            [Token.OP_EXPONENT] = @"(\^)",
+            [Token.OP_SUBTRACTION] = @"(-)",
+            [Token.OP_MODULO] = @"(%)",
+            [Token.OP_MULTIPLICATION] = @"(\*)",
 
-            [LanguageToken.RE_L_PAREN] = @"\(",
-            [LanguageToken.RE_R_PAREN] = @"\)",
-            [LanguageToken.RE_COMMA] = @"\,",
+            [Token.RE_L_PAREN] = @"\(",
+            [Token.RE_R_PAREN] = @"\)",
+            [Token.RE_COMMA] = @"\,",
 
-            [LanguageToken.KW_FUNC] = @"(func)[^\w\d]|(func)\z",
-            [LanguageToken.KW_RETURN] = @"(ret)[^\w\d]|(ret)\z",
+            [Token.KW_FUNC] = @"(func)|(func)\z",
+            [Token.KW_RETURN] = @"(ret)|(ret)\z",
 
-            [LanguageToken.IDENTIFIER] = @"([$a-zA-Z_][$\w]*)",
+            [Token.INTEGER] = @"(\d+)",
 
-            [LanguageToken.SEPARATOR] = @"\s"
+            [Token.IDENTIFIER] = @"([$a-zA-Z_][$\w]*)",
+
+            [Token.SEPARATOR] = @"\s+"
         };
     }
 }
