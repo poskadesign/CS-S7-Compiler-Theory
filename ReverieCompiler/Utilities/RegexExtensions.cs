@@ -14,6 +14,6 @@ namespace Reverie.Utilities {
             => IsMatch(input, @"\A(?:" + pattern + @")");
 
         public static Match PartialMatch(string input, string pattern)
-            => Match(input, @"\A(?:" + pattern + @")");
+            => Match(input, @"\A(?:^" + pattern + @")");
     }
 }

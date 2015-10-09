@@ -32,11 +32,11 @@ namespace Reverie.Traits {
         RE_L_PAREN,
         RE_R_PAREN,
         RE_COMMA,
-
+        // user defined symbols
         IDENTIFIER,
-
+        // type traits
         INTEGER,
-
+        // whitespace and separation
         SEPARATOR
     }
 

@@ -9,7 +9,7 @@
 using System.Text.RegularExpressions;
 using Reverie.Traits;
 
-namespace Reverie.Processing {
+namespace Reverie.SyntaxProcessing {
     public struct ResolvedToken {
         public ResolvedToken(Token type, string capture, int row, int column) {
             Type = type;

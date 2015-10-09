@@ -1,4 +1,4 @@
-func sum(a, b):
+func sum(a, b)
 	ret a+b
 	
 sum(2, 6)

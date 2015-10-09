@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
-using Reverie.Processing;
+using Reverie.SyntaxProcessing;
 using Reverie.Traits;
 using Reverie.Utilities;
 
@@ -12,7 +12,7 @@ namespace Reverie.Tests {
         private static void Main(string[] args) {
             TestBasicTypeExtensions();
             TestScanner();
-            TestFuncKeywordExpression();
+            //TestFuncKeywordExpression();
             
         }
 
@@ -34,11 +34,7 @@ namespace Reverie.Tests {
             using (var sr = new StreamReader(@"..\..\SampleFiles\sample1.re")) {
                 testString = sr.ReadToEnd();
             }
-            var s = new Scanner();
-            Console.WriteLine($"Scanning: \n\n{testString}\n---END\n\nIdentified tokens:\n");
-            var res = s.IdentifyTokens("func sum(a, b)\n\tret a+b\n\nsum(2, 4)");
-            res.ForEach((r) => Console.WriteLine(r));
-            Debugger.Break();
+            Compiler.CompileUnit(testString);
         }
     }
 }

@@ -8,16 +8,15 @@
 
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
-using System.Linq.Expressions;
 using Reverie.Exceptions;
 using Reverie.Traits;
 using Reverie.Utilities;
 
-namespace Reverie.Processing {
+namespace Reverie.SyntaxProcessing {
     public class Scanner {
-
         [Pure]
         public List<ResolvedToken> IdentifyTokens(string input) {
+            var originalInput = input;
             int column = 1, row = 1;
             var result = new List<ResolvedToken>();
             // if there is still input left
@@ -36,7 +35,8 @@ namespace Reverie.Processing {
                     column = 1;
                 }
                 else
-                    throw new ScannerException(ErrorCode.ErrorForCode("SCA1"));
+                    throw new ScannerException(ErrorCode.ErrorForCode("SCA1"), column, row, originalInput,
+                        "Check your syntax for errors.");
             }
             return result;
         }
