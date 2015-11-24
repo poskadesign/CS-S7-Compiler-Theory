@@ -1,4 +1,4 @@
-func sum(a, b)
-	ret a+b
+func multiply(x, y):
+	ret x*y
 	
-sum(2, 6)
+multiply(5, 4)

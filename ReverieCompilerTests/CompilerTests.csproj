@@ -50,11 +50,12 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="SampleFiles\sample1.re" />
+    <None Include="SampleFiles\sample2.re" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ReverieCompiler\ReverieCompiler.csproj">
+    <ProjectReference Include="..\ReverieCompiler\Compiler.csproj">
       <Project>{4f91806d-df70-47e4-9839-e3b5ce77b5b1}</Project>
-      <Name>ReverieCompiler</Name>
+      <Name>Compiler</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

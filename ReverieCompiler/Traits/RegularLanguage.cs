@@ -32,10 +32,12 @@ namespace Reverie.Traits {
         RE_L_PAREN,
         RE_R_PAREN,
         RE_COMMA,
+        RE_COLON,
         // user defined symbols
         IDENTIFIER,
         // type traits
         INTEGER,
+        REAL,
         // whitespace and separation
         SEPARATOR
     }
@@ -59,9 +61,10 @@ namespace Reverie.Traits {
             [Token.OP_MODULO] = @"(%)",
             [Token.OP_MULTIPLICATION] = @"(\*)",
 
-            [Token.RE_L_PAREN] = @"\(",
-            [Token.RE_R_PAREN] = @"\)",
-            [Token.RE_COMMA] = @"\,",
+            [Token.RE_L_PAREN] = @"(\()",
+            [Token.RE_R_PAREN] = @"(\))",
+            [Token.RE_COMMA] = @"(\,)",
+            [Token.RE_COLON] = @"(:)",
 
             [Token.KW_FUNC] = @"(func)|(func)\z",
             [Token.KW_RETURN] = @"(ret)|(ret)\z",
