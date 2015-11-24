@@ -9,6 +9,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using Reverie.Exceptions;
+using Reverie.SyntaxProcessing.Constructs;
 using Reverie.Traits;
 using Reverie.Utilities;
 
@@ -16,6 +17,8 @@ namespace Reverie.SyntaxProcessing {
     public class Scanner {
         [Pure]
         public List<ResolvedToken> IdentifyTokens(string input) {
+            Contract.Requires(input != null);
+
             var originalInput = input;
             int column = 1, row = 1;
             var result = new List<ResolvedToken>();
@@ -41,7 +44,10 @@ namespace Reverie.SyntaxProcessing {
             return result;
         }
 
+        [Pure]
         private static KeyValuePair<Token, string>? IdentifyFirstToken(string input) {
+            Contract.Requires(input != null);
+
             foreach (var token in RegularLanguage.TokenPatterns) {
                 var match = RegexExtensions.PartialMatch(input, token.Value);
                 if (match.Captures.Count > 0)

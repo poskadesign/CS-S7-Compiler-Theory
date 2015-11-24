@@ -10,6 +10,7 @@
 
 using System;
 using Reverie.Exceptions;
+using Reverie.LexicalAnalysis;
 using Reverie.SyntaxProcessing;
 
 namespace Reverie {
@@ -22,23 +23,33 @@ namespace Reverie {
         /// </summary>
         /// <param name="source">Compilation unit input</param>
         /// <returns>Assembly instruction listing</returns>
-        public static string CompileUnit(string source) {
+        public static object CompileUnit(string source) {
 #if VERBOSE
             Console.WriteLine("Reverie Compiler\nAuthor Vilius Poška. 2015\n");
             Console.WriteLine($"Translating input:\n\n{source}\n");
 #endif
-            #region 1. Syntax Scanner
             try {
+
+                #region 1. Syntax Processing
                 var tokens = new Scanner().IdentifyTokens(source);
 #if VERBOSE
                 Console.WriteLine("Phase 1 (scanner) results:\n");
                 tokens.ForEach((r) => Console.WriteLine(r));
 #endif
+                #endregion
+
+                #region 2. Lexical Analysis
+                var processedTokens = new Lexer().ProcessTokens(tokens);
+                #endregion
+
             } catch (ScannerException e) {
                 Console.WriteLine($"{e.Message}\n\nCompilation process has been terminated.");
                 return null;
             }
-            #endregion
+            catch (LexerException e) {
+                Console.WriteLine($"{e.Message}\n\nCompilation process has been terminated.");
+                return null;
+            }
             return null;
         }
     }

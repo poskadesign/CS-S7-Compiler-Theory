@@ -11,7 +11,7 @@ using System.Linq;
 using Reverie.Traits;
 
 namespace Reverie.Exceptions {
-    public class ScannerException : Exception {
+    public sealed class ScannerException : Exception {
         public ScannerException(ErrorCode e, int col = 0, int row = 0, string codeFragment = "", string details = "")
             : base(FormatMessage(e, col, row, codeFragment, details)) {}
 

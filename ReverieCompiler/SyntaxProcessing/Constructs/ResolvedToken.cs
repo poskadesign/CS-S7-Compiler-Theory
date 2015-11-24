@@ -6,11 +6,11 @@
 //   2015-10-08
 //   
 
-using System.Text.RegularExpressions;
 using Reverie.Traits;
+using System.Text.RegularExpressions;
 
-namespace Reverie.SyntaxProcessing {
-    public struct ResolvedToken {
+namespace Reverie.SyntaxProcessing.Constructs {
+    public class ResolvedToken {
         public ResolvedToken(Token type, string capture, int row, int column) {
             Type = type;
             Capture = capture;
@@ -20,9 +20,9 @@ namespace Reverie.SyntaxProcessing {
 
         public override string ToString() => $"{Type}: (\"{Regex.Escape(Capture)}\"), Col: {Column}, Row: {Row}";
 
-        public Token Type;
-        public string Capture;
-        public int Row;
-        public int Column;
+        public Token Type { get; set; }
+        public string Capture { get; set; }
+        public int Row { get; set; }
+        public int Column { get; set; }
     }
 }
