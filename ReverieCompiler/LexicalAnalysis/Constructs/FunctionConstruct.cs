@@ -8,12 +8,13 @@
 
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
+using Reverie.LexicalAnalysis.Constructs.Interfaces;
 using Reverie.SyntaxProcessing.Constructs;
 
 namespace Reverie.LexicalAnalysis.Constructs {
     public class FunctionConstruct : IConstruct {
 
-        public FunctionConstruct(IdentifierConstruct name, IEnumerable<IdentifierConstruct> parameters, ExectuableBlockConstruct controlBlock) {
+        public FunctionConstruct(IdentifierConstruct name, IList<IdentifierConstruct> parameters, ExectuableBlockConstruct controlBlock) {
             Contract.Requires(name != null);
             Contract.Requires(parameters != null);
             Contract.Requires(controlBlock != null);
@@ -26,6 +27,8 @@ namespace Reverie.LexicalAnalysis.Constructs {
         public IdentifierConstruct Name { get; }
         public IEnumerable<IdentifierConstruct>  Parameters { get; }
         public ExectuableBlockConstruct ControlBlock { get; }
+
+        public override string ToString() => Name.Name;
 
     }
 }

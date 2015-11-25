@@ -15,11 +15,13 @@ namespace Reverie.Traits {
     /// </summary>
     public enum Token
     {
-        // whitespace
+        // whitespace and special identifiers
         INDENT,
-        NEW_LINE,
+        EOL,
+        EOF,
         // operators
         OP_ADDITION,
+        OP_ASSIGNMENT,
         OP_DIVISION,
         OP_EXPONENT,
         OP_SUBTRACTION,
@@ -38,8 +40,8 @@ namespace Reverie.Traits {
         // type traits
         INTEGER,
         REAL,
-        // whitespace and separation
-        SEPARATOR
+        // ignored symbols
+        IGNORABLE
     }
 
     /// <summary>
@@ -51,10 +53,11 @@ namespace Reverie.Traits {
         /// Maps language tokens to their respective regular expression patterns
         /// </summary>
         public static IDictionary<Token, Pattern> TokenPatterns = new Dictionary<Token, Pattern> {
-            [Token.INDENT] = @"(\t)|(\s{4})",
-            [Token.NEW_LINE] = @"(\n)|(\r)",
+            [Token.INDENT] = @"(\t)|(    )",
+            [Token.EOL] = @"(\r\n)|(\n)|(\r)",
 
             [Token.OP_ADDITION] = @"(\+)",
+            [Token.OP_ASSIGNMENT] = @"(\=)",
             [Token.OP_DIVISION] = @"(/)",
             [Token.OP_EXPONENT] = @"(\^)",
             [Token.OP_SUBTRACTION] = @"(-)",
@@ -73,7 +76,7 @@ namespace Reverie.Traits {
 
             [Token.IDENTIFIER] = @"([$a-zA-Z_][$\w]*)",
 
-            [Token.SEPARATOR] = @"\s+"
+            [Token.IGNORABLE] = @"\s+"
         };
     }
 }

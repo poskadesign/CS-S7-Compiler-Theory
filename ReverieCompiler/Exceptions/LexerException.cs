@@ -7,14 +7,18 @@
 // 
 
 using System;
-using Reverie.SyntaxProcessing.Constructs;
+using Reverie.Traits;
 
 namespace Reverie.Exceptions {
     public sealed class LexerException : Exception {
-        public LexerException(ErrorCode e, ResolvedToken expected, ResolvedToken encountered, string details = "")
+
+        public LexerException(ErrorCode e, string details = "") :
+            base($"{e}\n{details}.") { }
+
+        public LexerException(ErrorCode e, Token expected, Token encountered, string details = "")
             : base(FormatMessage(e, expected, encountered, details)) { }
 
-        private static string FormatMessage(ErrorCode e, ResolvedToken expected, ResolvedToken encountered, string details) {
+        private static string FormatMessage(ErrorCode e, Token expected, Token encountered, string details) {
            return $"{e}\n{details}. Expected token: \"{expected}\", encountered: \"{encountered}\".";
         }
 

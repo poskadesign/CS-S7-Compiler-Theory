@@ -52,6 +52,7 @@
     <None Include="App.config" />
     <None Include="SampleFiles\sample1.re" />
     <None Include="SampleFiles\sample2.re" />
+    <None Include="SampleFiles\sample3.re" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ReverieCompiler\Compiler.csproj">

@@ -31,10 +31,11 @@ namespace Reverie.Exceptions {
 
         private static readonly Dictionary<string, string> ErrorCodes = new Dictionary<string, string> {
             // syntax processor exceptions
-            ["SCA1"] = "Uknown token encountered.",
+            ["SCA1"] = "Uknown token encountered",
 
             // lexical analyser exceptions
-            ["LEX1"] = "Unexpected token encountered"
+            ["LEX1"] = "Unexpected token encountered",
+            ["LEX2"] = "Unexpected end of token sequence"
         };
     }
 }

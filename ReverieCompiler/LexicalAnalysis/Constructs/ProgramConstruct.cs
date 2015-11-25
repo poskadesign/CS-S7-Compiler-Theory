@@ -8,6 +8,7 @@
 
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
+using Reverie.LexicalAnalysis.Constructs.Interfaces;
 
 namespace Reverie.LexicalAnalysis.Constructs {
     public class ProgramConstruct : IConstruct {

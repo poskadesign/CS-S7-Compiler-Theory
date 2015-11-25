@@ -31,7 +31,7 @@ namespace Reverie.Tests {
 
         private static void TestScanner() {
             string testString;
-            using (var sr = new StreamReader(@"..\..\SampleFiles\sample1.re")) {
+            using (var sr = new StreamReader(@"..\..\SampleFiles\sample3.re")) {
                 testString = sr.ReadToEnd();
             }
             Compiler.CompileUnit(testString);

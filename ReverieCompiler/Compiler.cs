@@ -12,6 +12,7 @@ using System;
 using Reverie.Exceptions;
 using Reverie.LexicalAnalysis;
 using Reverie.SyntaxProcessing;
+using Reverie.Traits;
 
 namespace Reverie {
     /// <summary>
@@ -34,12 +35,15 @@ namespace Reverie {
                 var tokens = new Scanner().IdentifyTokens(source);
 #if VERBOSE
                 Console.WriteLine("Phase 1 (scanner) results:\n");
-                tokens.ForEach((r) => Console.WriteLine(r));
+                tokens.ForEach(Console.WriteLine);
 #endif
                 #endregion
 
                 #region 2. Lexical Analysis
+
+                tokens.RemoveAll(t => t.Type == Token.IGNORABLE);
                 var processedTokens = new Lexer().ProcessTokens(tokens);
+
                 #endregion
 
             } catch (ScannerException e) {

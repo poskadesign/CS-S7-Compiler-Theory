@@ -6,11 +6,14 @@
 //   2015-11-24
 // 
 
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using Reverie.Exceptions;
 using Reverie.LexicalAnalysis.Constructs;
+using Reverie.LexicalAnalysis.Constructs.Interfaces;
 using Reverie.LexicalAnalysis.Extensions;
 using Reverie.SyntaxProcessing.Constructs;
 using Reverie.Traits;
@@ -18,44 +21,179 @@ using Reverie.Traits;
 namespace Reverie.LexicalAnalysis {
     public sealed class Lexer {
 
-        private IList<ResolvedToken> Tokens { get; set; }
+        private IList<ResolvedToken> _tokens;
+        private int _indentation;
 
         public ProgramConstruct ProcessTokens(IList<ResolvedToken> tokens) {
             Contract.Requires(tokens != null);
 
-            Tokens = tokens;
-            IList<FunctionConstruct> functions = new List<FunctionConstruct>();
+            _tokens = tokens;
+            var functions = new List<FunctionConstruct>();
+            ExectuableBlockConstruct block = null;
 
-            while (Tokens.Any()) {
-                switch (Tokens.First().Type) {
+            while (_tokens.Any()) {
+                switch (PeekNextToken()) {
+
                     case Token.KW_FUNC:
                         functions.Add(ProcessAsFunction());
                         break;
-                    case Token.NEW_LINE:
 
+                    case Token.EOL:
+                        GetNextToken();
                         break;
 
                     default:
-
+                        block = ProcessAsBlock();
                         break;
+
                 }
             }
 
-            //var token = tokens.First();
 
-
-            return null;
+            return new ProgramConstruct(functions, block);
         }
 
         private FunctionConstruct ProcessAsFunction() {
 
+            GetNextTokenAsserted(Token.KW_FUNC);
 
+            var name = new IdentifierConstruct(GetNextTokenAsserted(Token.IDENTIFIER).Capture);
+            
+            // parse parameters
+            var parameters = new List<IdentifierConstruct>();
+
+            GetNextTokenAsserted(Token.RE_L_PAREN);
+            while (PeekNextToken() != Token.RE_R_PAREN) {
+                
+                switch (PeekNextToken()) {
+
+                    case Token.IDENTIFIER:
+                        parameters.Add(new IdentifierConstruct(GetNextToken().Capture));
+                        break;
+
+                    case Token.RE_COMMA:
+                        GetNextToken();
+                        break;
+
+                    default:
+                        throw new LexerException(ErrorCode.ErrorForCode("LEX1"), Token.IDENTIFIER, PeekNextToken());
+                }
+
+            }
+            GetNextTokenAsserted(Token.RE_R_PAREN);
+            GetNextTokenAsserted(Token.RE_COLON);
+            
+            return new FunctionConstruct(name, parameters, ProcessAsBlock());
+        }
+
+
+
+        private ExectuableBlockConstruct ProcessAsBlock() {
+            var expressions = new List<IExecutableConstruct>();
+            _indentation++;
+
+            while (IsExecutionInSameBlock(_indentation)) {
+                SkipTokensAsserted(Token.INDENT, _indentation);
+
+                ProcessAsExpression();
+            }
+
+
+
+            Contract.Ensures(Contract.Result<ExectuableBlockConstruct>() != null);
             return null;
         }
 
-        private ResolvedToken GetNextToken(ResolvedToken expected) {
-            return Tokens.FirstWithAssert(expected, new LexerException(ErrorCode.ErrorForCode("LEX1"), expected, Tokens.First(), "Unexpected token encountered"));
+        private IExecutableConstruct ProcessAsExpression() {
+            var firstToken = PeekNextToken();
+            var secondToken = PeekNextToken(1);
+
+            switch (PeekNextToken()) {
+
+                case Token.IDENTIFIER:
+                    if (firstToken == Token.IDENTIFIER && secondToken == Token.OP_ASSIGNMENT)
+                        return ProcessAsAssignment();
+                    if (firstToken == Token.IDENTIFIER && secondToken == Token.RE_L_PAREN)
+                        return ProcessAsFunctionCall();
+                    throw new LexerException(ErrorCode.ErrorForCode("LEX1"), Token.RE_L_PAREN, secondToken);
+
+                case Token.KW_RETURN:
+                    return ProcessAsFunctionReturn();
+
+                default:
+                    throw new LexerException(ErrorCode.ErrorForCode("LEX1"), Token.IDENTIFIER, secondToken);
+
+            }
         }
+
+        private AssignmentOperatorConstruct ProcessAsAssignment() {
+            var lhs = new VariableConstruct(new IdentifierConstruct(GetNextTokenAsserted(Token.IDENTIFIER).Capture));
+            SkipTokensAsserted(Token.OP_ASSIGNMENT);
+            return new AssignmentOperatorConstruct(lhs, ProcessAsRvalue());
+        }
+
+        private IRvalueConstruct ProcessAsRvalue() {
+            
+            throw new NotImplementedException();
+        }
+
+        private FunctionCallConstruct ProcessAsFunctionCall() {
+            throw new NotImplementedException();
+        }
+
+        private FunctionReturnConstruct ProcessAsFunctionReturn() {
+            throw new NotImplementedException();
+        }
+
+
+        #region Helper Methods
+
+        private bool IsExecutionInSameBlock(int indentLevel)
+            => _tokens.Take(indentLevel).All(t => t.Type == Token.INDENT);
+
+        private ResolvedToken GetNextToken() {
+            var first = _tokens.FirstOrDefault();
+
+            if (first == null)
+                throw new LexerException(ErrorCode.ErrorForCode("LEX2"));
+
+            _tokens.RemoveAt(0);
+            return first;
+        }
+
+        private ResolvedToken GetNextTokenAsserted(Token expected) {
+            var first = _tokens.FirstOrDefault();
+
+            if (first == null)
+                throw new LexerException(ErrorCode.ErrorForCode("LEX2"));
+            if (first.Type != expected)
+                throw new LexerException(ErrorCode.ErrorForCode("LEX1"), expected, first.Type);
+
+            _tokens.RemoveAt(0);
+            return first;
+        }
+
+        private void SkipTokensAsserted(Token expected, int count = 1) {
+            Contract.Requires(count > 0);
+
+            var subset = _tokens.Take(count).ToArray();
+
+            if (subset.Any(t => t.Type != expected))
+                throw new LexerException(ErrorCode.ErrorForCode("LEX1"), expected, subset.Last().Type);
+
+            for (var i = 0; i < count; i++)
+                _tokens.RemoveAt(0);
+
+        }
+
+        private Token PeekNextToken(int count = 0) {
+            if (_tokens.Count <= count)
+                throw new LexerException(ErrorCode.ErrorForCode("LEX2"));
+
+            return _tokens.Skip(count).First().Type;
+        }
+
+        #endregion
 
     }
 }

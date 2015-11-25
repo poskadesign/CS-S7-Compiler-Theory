@@ -8,6 +8,7 @@
 
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
+using System.Linq;
 using Reverie.Exceptions;
 using Reverie.SyntaxProcessing.Constructs;
 using Reverie.Traits;
@@ -33,7 +34,7 @@ namespace Reverie.SyntaxProcessing {
                     input = input.Substring(token.Value.Value.Length);
                     column += t.Value.Length;
 
-                    if (t.Key != Token.NEW_LINE) continue;
+                    if (t.Key != Token.EOL) continue;
                     row++;
                     column = 1;
                 }
@@ -41,6 +42,7 @@ namespace Reverie.SyntaxProcessing {
                     throw new ScannerException(ErrorCode.ErrorForCode("SCA1"), column, row, originalInput,
                         "Check your syntax for errors.");
             }
+            result.Add(new ResolvedToken(Token.EOF, "", row, column + result.Last().Capture.Length));
             return result;
         }
 

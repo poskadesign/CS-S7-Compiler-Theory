@@ -7,6 +7,7 @@
 // 
 
 using System.Diagnostics.Contracts;
+using Reverie.LexicalAnalysis.Constructs.Interfaces;
 
 namespace Reverie.LexicalAnalysis.Constructs {
     public class IdentifierConstruct : IConstruct {
@@ -18,5 +19,7 @@ namespace Reverie.LexicalAnalysis.Constructs {
         }
 
         public string Name { get; }
+
+        public override string ToString() => Name;
     }
 }
