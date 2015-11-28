@@ -133,7 +133,53 @@ namespace Reverie.LexicalAnalysis {
         }
 
         private IRvalueConstruct ProcessAsRvalue() {
-            
+
+            var members = new List<object>();
+            var endOfExpression = false;
+
+            while (!endOfExpression) {
+
+                endOfExpression = false;
+                switch (PeekNextToken()) {
+
+                    case Token.INTEGER:
+                        members.Add(ParseIntegerConstruct());
+                        break;
+
+                    case Token.REAL:
+                        throw new NotImplementedException();
+
+                    case Token.IDENTIFIER:
+                        if (PeekNextToken(1) == Token.RE_L_PAREN)
+                            members.Add(ProcessAsFunctionCall());
+                        else
+                            members.Add(ProcessAsVariableConstruct());
+                        break;
+
+                    default:
+                        throw new LexerException(ErrorCode.ErrorForCode("LEX1"), Token.RE_L_PAREN, PeekNextToken());
+                }
+
+                switch (PeekNextToken()) {
+                    case Token.OP_ADDITION:
+                    case Token.OP_DIVISION:
+                    case Token.OP_EXPONENT:
+                    case Token.OP_MODULO:
+                    case Token.OP_MULTIPLICATION:
+                    case Token.OP_SUBTRACTION:
+                        members.Add(GetNextToken());
+                        endOfExpression = true;
+                        break;
+                    default:
+                        throw new LexerException(ErrorCode.ErrorForCode("LEX1"), "Expected infix operator");
+                }
+
+            }
+                throw new NotImplementedException();
+        }
+
+
+        private IRvalueConstruct ParseIntegerConstruct() {
             throw new NotImplementedException();
         }
 
@@ -142,6 +188,10 @@ namespace Reverie.LexicalAnalysis {
         }
 
         private FunctionReturnConstruct ProcessAsFunctionReturn() {
+            throw new NotImplementedException();
+        }
+
+        private VariableConstruct ProcessAsVariableConstruct() {
             throw new NotImplementedException();
         }
 
@@ -180,6 +230,14 @@ namespace Reverie.LexicalAnalysis {
 
             if (subset.Any(t => t.Type != expected))
                 throw new LexerException(ErrorCode.ErrorForCode("LEX1"), expected, subset.Last().Type);
+
+            for (var i = 0; i < count; i++)
+                _tokens.RemoveAt(0);
+
+        }
+
+        private void SkipTokens(int count = 1) {
+            Contract.Requires(count > 0);
 
             for (var i = 0; i < count; i++)
                 _tokens.RemoveAt(0);

@@ -79,6 +79,7 @@
     <Compile Include="LexicalAnalysis\Constructs\VariableConstruct.cs" />
     <Compile Include="LexicalAnalysis\Extensions\ListExtensions.cs" />
     <Compile Include="LexicalAnalysis\Lexer.cs" />
+    <Compile Include="LexicalAnalysis\PolishNotation.cs" />
     <Compile Include="SyntaxProcessing\Constructs\ResolvedToken.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
