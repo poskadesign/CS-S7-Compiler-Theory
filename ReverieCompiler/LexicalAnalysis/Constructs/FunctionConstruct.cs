@@ -7,6 +7,7 @@
 // 
 
 using System.Collections.Generic;
+using System.Linq;
 using System.Diagnostics.Contracts;
 using Reverie.LexicalAnalysis.Constructs.Interfaces;
 using Reverie.SyntaxProcessing.Constructs;
@@ -22,13 +23,14 @@ namespace Reverie.LexicalAnalysis.Constructs {
             Name = name;
             Parameters = parameters;
             ControlBlock = controlBlock;
+
         }
 
         public IdentifierConstruct Name { get; }
         public ICollection<IdentifierConstruct>  Parameters { get; }
         public ExectuableBlockConstruct ControlBlock { get; }
 
-        public override string ToString() => Name.Name;
+        public override string ToString() => $"{Name}({Parameters.Select(p => p.ToString()).Aggregate((a, b) => a + ", " + b)})";
 
     }
 }

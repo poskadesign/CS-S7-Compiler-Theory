@@ -22,7 +22,7 @@ namespace Reverie.LexicalAnalysis {
     public sealed class Lexer {
 
         private IList<ResolvedToken> _tokens;
-        private int _indentation;
+        private int _level;
 
         public ProgramConstruct ProcessTokens(IList<ResolvedToken> tokens) {
             Contract.Requires(tokens != null);
@@ -94,16 +94,16 @@ namespace Reverie.LexicalAnalysis {
 
         private ExectuableBlockConstruct ProcessAsBlock() {
             var expressions = new List<IExecutableConstruct>();
-            _indentation++;
+            _level++;
 
-            while (IsExecutionInSameBlock(_indentation)) {
-                SkipTokensAsserted(Token.INDENT, _indentation);
+            while (IsExecutionInSameBlock(_level)) {
+                SkipTokensAsserted(Token.INDENT, _level);
 
                 expressions.Add(ProcessAsExpression());
                 SkipNewLines();
             }
 
-
+            _level--;
 
             Contract.Ensures(Contract.Result<ExectuableBlockConstruct>() != null);
             return new ExectuableBlockConstruct(expressions);
@@ -190,9 +190,25 @@ namespace Reverie.LexicalAnalysis {
         }
 
         private FunctionCallConstruct ProcessAsFunctionCall() {
-            throw new NotImplementedException();
+            var identifier = new IdentifierConstruct(GetNextTokenAsserted(Token.IDENTIFIER).Capture);
+            SkipTokensAsserted(Token.RE_L_PAREN);
+
+            var parameters = new List<IRvalueConstruct>();
+
+            var endOfExpression = true;
+            while (PeekNextToken() != Token.RE_R_PAREN) {
+                if (!endOfExpression)
+                    SkipTokensAsserted(Token.RE_COMMA);
+                else
+                    endOfExpression = false;
+                parameters.Add(ProcessAsRvalue());
+            }
+
+            SkipTokensAsserted(Token.RE_R_PAREN);
+            return new FunctionCallConstruct(identifier, parameters);
         }
 
+        // TODO FIXME ret a+b  =>  ret b+a
         private FunctionReturnConstruct ProcessAsFunctionReturn() {
             GetNextTokenAsserted(Token.KW_RETURN);
             return new FunctionReturnConstruct(ProcessAsRvalue());

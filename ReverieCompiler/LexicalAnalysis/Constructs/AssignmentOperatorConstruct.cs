@@ -22,5 +22,7 @@ namespace Reverie.LexicalAnalysis.Constructs {
 
         private ILvalueConstruct Lhs { get; } 
         private IRvalueConstruct Rhs { get; }
+
+        public override string ToString() => $"{Lhs} = {Rhs}";
     }
 }
