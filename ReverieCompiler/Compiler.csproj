@@ -71,6 +71,7 @@
     <Compile Include="LexicalAnalysis\Constructs\FunctionReturnConstruct.cs" />
     <Compile Include="LexicalAnalysis\Constructs\IdentifierConstruct.cs" />
     <Compile Include="LexicalAnalysis\Constructs\InfixOperatorConstruct.cs" />
+    <Compile Include="LexicalAnalysis\Constructs\IntegerConstruct.cs" />
     <Compile Include="LexicalAnalysis\Constructs\Interfaces\IConstruct.cs" />
     <Compile Include="LexicalAnalysis\Constructs\Interfaces\IExecutableConstruct.cs" />
     <Compile Include="LexicalAnalysis\Constructs\Interfaces\ILvalueConstruct.cs" />

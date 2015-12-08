@@ -1,4 +1,6 @@
 ﻿func fun1(x, y, z):
+
+
     temp = x + z
     ret temp + y
 

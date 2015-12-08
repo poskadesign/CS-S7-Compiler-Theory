@@ -64,14 +64,17 @@ namespace Reverie.LexicalAnalysis {
 
             GetNextTokenAsserted(Token.RE_L_PAREN);
             while (PeekNextToken() != Token.RE_R_PAREN) {
-                
                 switch (PeekNextToken()) {
 
                     case Token.IDENTIFIER:
+                        if (PeekNextToken(1) != Token.RE_R_PAREN && PeekNextToken(1) != Token.RE_COMMA)
+                            throw new LexerException(ErrorCode.ErrorForCode("LEX1"), Token.RE_R_PAREN, PeekNextToken(1));
                         parameters.Add(new IdentifierConstruct(GetNextToken().Capture));
                         break;
 
                     case Token.RE_COMMA:
+                        if (PeekNextToken(1) != Token.IDENTIFIER)
+                            throw new LexerException(ErrorCode.ErrorForCode("LEX1"), Token.IDENTIFIER, PeekNextToken(1));
                         GetNextToken();
                         break;
 
@@ -82,6 +85,7 @@ namespace Reverie.LexicalAnalysis {
             }
             GetNextTokenAsserted(Token.RE_R_PAREN);
             GetNextTokenAsserted(Token.RE_COLON);
+            SkipNewLines();
             
             return new FunctionConstruct(name, parameters, ProcessAsBlock());
         }
@@ -139,7 +143,7 @@ namespace Reverie.LexicalAnalysis {
 
             while (!endOfExpression) {
 
-                endOfExpression = false;
+                endOfExpression = true;
                 switch (PeekNextToken()) {
 
                     case Token.INTEGER:
@@ -168,19 +172,20 @@ namespace Reverie.LexicalAnalysis {
                     case Token.OP_MULTIPLICATION:
                     case Token.OP_SUBTRACTION:
                         members.Add(GetNextToken());
-                        endOfExpression = true;
+                        endOfExpression = false;
                         break;
                     default:
-                        throw new LexerException(ErrorCode.ErrorForCode("LEX1"), "Expected infix operator");
+                        break;
                 }
 
             }
-                throw new NotImplementedException();
+            return PolishNotation.InfixToPrefix(members);
         }
 
 
         private IRvalueConstruct ParseIntegerConstruct() {
-            throw new NotImplementedException();
+            var value = int.Parse(GetNextTokenAsserted(Token.INTEGER).Capture);
+            return new IntegerConstruct(value);
         }
 
         private FunctionCallConstruct ProcessAsFunctionCall() {
@@ -188,15 +193,21 @@ namespace Reverie.LexicalAnalysis {
         }
 
         private FunctionReturnConstruct ProcessAsFunctionReturn() {
-            throw new NotImplementedException();
+            GetNextTokenAsserted(Token.KW_RETURN);
+            return new FunctionReturnConstruct(ProcessAsRvalue());
         }
 
         private VariableConstruct ProcessAsVariableConstruct() {
-            throw new NotImplementedException();
+            return new VariableConstruct(new IdentifierConstruct(GetNextTokenAsserted(Token.IDENTIFIER).Capture));
         }
 
 
         #region Helper Methods
+
+        private void SkipNewLines() {
+            while(_tokens.First().Type == Token.EOL)
+                    _tokens.RemoveAt(0);
+        }
 
         private bool IsExecutionInSameBlock(int indentLevel)
             => _tokens.Take(indentLevel).All(t => t.Type == Token.INDENT);

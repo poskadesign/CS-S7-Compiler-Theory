@@ -19,6 +19,7 @@ namespace Reverie.LexicalAnalysis.Constructs {
         }
 
         private IdentifierConstruct Name { get; }
-         
+
+        public override string ToString() => Name.Name;
     }
 }
