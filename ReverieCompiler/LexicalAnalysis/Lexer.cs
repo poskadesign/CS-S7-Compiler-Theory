@@ -99,13 +99,14 @@ namespace Reverie.LexicalAnalysis {
             while (IsExecutionInSameBlock(_indentation)) {
                 SkipTokensAsserted(Token.INDENT, _indentation);
 
-                ProcessAsExpression();
+                expressions.Add(ProcessAsExpression());
+                SkipNewLines();
             }
 
 
 
             Contract.Ensures(Contract.Result<ExectuableBlockConstruct>() != null);
-            return null;
+            return new ExectuableBlockConstruct(expressions);
         }
 
         private IExecutableConstruct ProcessAsExpression() {
@@ -205,7 +206,7 @@ namespace Reverie.LexicalAnalysis {
         #region Helper Methods
 
         private void SkipNewLines() {
-            while(_tokens.First().Type == Token.EOL)
+            while(_tokens.First()?.Type == Token.EOL)
                     _tokens.RemoveAt(0);
         }
 

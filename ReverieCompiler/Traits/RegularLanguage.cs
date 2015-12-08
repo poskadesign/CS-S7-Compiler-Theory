@@ -7,6 +7,7 @@
 //
 
 using System.Collections.Generic;
+using Reverie.Exceptions;
 using Pattern = System.String;
 
 namespace Reverie.Traits {
@@ -78,5 +79,20 @@ namespace Reverie.Traits {
 
             [Token.IGNORABLE] = @"\s+"
         };
+
+        public static int OperatorPrecedence(Token op) {
+            switch (op) {
+                case Token.OP_ADDITION:
+                    case Token.OP_SUBTRACTION:
+                    return 1;
+                    case Token.OP_MULTIPLICATION:
+                    case Token.OP_DIVISION:
+                    case Token.OP_MODULO:
+                    case Token.OP_EXPONENT:
+                    return 2;
+                default:
+                    throw new LexerException(ErrorCode.ErrorForCode("LEX3"));
+            }
+        }
     }
 }

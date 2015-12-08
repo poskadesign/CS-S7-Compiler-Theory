@@ -13,7 +13,7 @@ using Reverie.LexicalAnalysis.Constructs.Interfaces;
 namespace Reverie.LexicalAnalysis.Constructs {
     public class ProgramConstruct : IConstruct {
 
-        public ProgramConstruct(IEnumerable<FunctionConstruct> functions, ExectuableBlockConstruct block) {
+        public ProgramConstruct(ICollection<FunctionConstruct> functions, ExectuableBlockConstruct block) {
             Contract.Requires(functions != null);
             Contract.Requires(block != null);
 
@@ -21,7 +21,7 @@ namespace Reverie.LexicalAnalysis.Constructs {
             Block = block;
         }
 
-        public IEnumerable<FunctionConstruct> Functions { get; }
+        public ICollection<FunctionConstruct> Functions { get; }
         public ExectuableBlockConstruct Block { get; }
     }
 }

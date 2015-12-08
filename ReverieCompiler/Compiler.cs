@@ -42,7 +42,7 @@ namespace Reverie {
                 #region 2. Lexical Analysis
 
                 tokens.RemoveAll(t => t.Type == Token.IGNORABLE);
-                var processedTokens = new Lexer().ProcessTokens(tokens);
+                var programConstruct = new Lexer().ProcessTokens(tokens);
 
                 #endregion
 

@@ -35,7 +35,8 @@ namespace Reverie.Exceptions {
 
             // lexical analyser exceptions
             ["LEX1"] = "Unexpected token encountered",
-            ["LEX2"] = "Unexpected end of token sequence"
+            ["LEX2"] = "Unexpected end of token sequence",
+            ["LEX3"] = "Invalid operator type"
         };
     }
 }

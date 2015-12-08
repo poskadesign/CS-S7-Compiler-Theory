@@ -15,5 +15,7 @@ namespace Reverie.LexicalAnalysis.Constructs {
         }
 
         private int Value { get; }
+
+        public override string ToString() => Value.ToString();
     }
 }

@@ -13,7 +13,7 @@ using Reverie.LexicalAnalysis.Constructs.Interfaces;
 namespace Reverie.LexicalAnalysis.Constructs {
     public class FunctionCallConstruct : IRvalueConstruct, IExecutableConstruct {
 
-        public FunctionCallConstruct(IdentifierConstruct callee, IList<IRvalueConstruct> parameters) {
+        public FunctionCallConstruct(IdentifierConstruct callee, ICollection<IRvalueConstruct> parameters) {
             Contract.Requires(callee != null);
             Contract.Requires(parameters != null);
 
@@ -22,6 +22,6 @@ namespace Reverie.LexicalAnalysis.Constructs {
         }
 
         private IdentifierConstruct Callee { get; }
-        private IList<IRvalueConstruct> Parameters { get; }
+        private ICollection<IRvalueConstruct> Parameters { get; }
     }
 }

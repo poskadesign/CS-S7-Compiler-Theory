@@ -1,7 +1,7 @@
 ﻿func fun1(x, y, z):
 
 
-    temp = x + z
+    temp = x + z * 4 + x
     ret temp + y
 
 func fun2():

@@ -13,12 +13,12 @@ using Reverie.LexicalAnalysis.Constructs.Interfaces;
 namespace Reverie.LexicalAnalysis.Constructs {
     public class ExectuableBlockConstruct : IConstruct {
 
-        public ExectuableBlockConstruct(IList<IExecutableConstruct> expressions) {
+        public ExectuableBlockConstruct(ICollection<IExecutableConstruct> expressions) {
             Contract.Requires(expressions != null);
 
             Expressions = expressions;
         }
 
-        private IList<IExecutableConstruct> Expressions { get; }
+        private ICollection<IExecutableConstruct> Expressions { get; }
     }
 }
