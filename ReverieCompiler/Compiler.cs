@@ -11,6 +11,7 @@
 using System;
 using Reverie.Exceptions;
 using Reverie.LexicalAnalysis;
+using Reverie.LexicalAnalysis.Extensions;
 using Reverie.SyntaxProcessing;
 using Reverie.Traits;
 
@@ -41,7 +42,11 @@ namespace Reverie {
 
                 #region 2. Lexical Analysis
 
+                // remove unnecessary whitespace
                 tokens.RemoveAll(t => t.Type == Token.IGNORABLE);
+                // remove repetitive new lines
+                tokens.RemoveEveryOtherToken(Token.EOL);
+
                 var programConstruct = new Lexer().ProcessTokens(tokens);
 
                 #endregion

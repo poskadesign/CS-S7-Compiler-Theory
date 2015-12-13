@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
+using Reverie.LexicalAnalysis.Extensions;
 using Reverie.SyntaxProcessing;
 using Reverie.Traits;
 using Reverie.Utilities;

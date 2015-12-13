@@ -31,7 +31,7 @@ namespace Reverie.LexicalAnalysis {
             var functions = new List<FunctionConstruct>();
             ExectuableBlockConstruct block = null;
 
-            while (_tokens.Any()) {
+            while (_tokens.Any() && PeekNextToken() != Token.EOF) {
                 switch (PeekNextToken()) {
 
                     case Token.KW_FUNC:
@@ -43,7 +43,7 @@ namespace Reverie.LexicalAnalysis {
                         break;
 
                     default:
-                        block = ProcessAsBlock();
+                        block = ProcessAsBlock(true);
                         break;
 
                 }
@@ -92,18 +92,20 @@ namespace Reverie.LexicalAnalysis {
 
 
 
-        private ExectuableBlockConstruct ProcessAsBlock() {
+        private ExectuableBlockConstruct ProcessAsBlock(bool isMainBlock = false) {
             var expressions = new List<IExecutableConstruct>();
-            _level++;
+            if (!isMainBlock)
+                _level++;
 
-            while (IsExecutionInSameBlock(_level)) {
+            while (IsExecutionInSameBlock(_level) && PeekNextToken() != Token.EOF) {
                 SkipTokensAsserted(Token.INDENT, _level);
 
                 expressions.Add(ProcessAsExpression());
                 SkipNewLines();
             }
 
-            _level--;
+            if (!isMainBlock)
+                _level--;
 
             Contract.Ensures(Contract.Result<ExectuableBlockConstruct>() != null);
             return new ExectuableBlockConstruct(expressions);
